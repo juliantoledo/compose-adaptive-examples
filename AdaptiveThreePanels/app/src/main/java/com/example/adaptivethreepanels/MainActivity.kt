@@ -20,6 +20,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -39,7 +43,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.example.adaptivethreepanels.ui.PanelColumn
+import com.example.adaptivethreepanels.ui.theme.Grey40
+import com.example.adaptivethreepanels.ui.theme.Grey60
 
 /**
  * The ViewModel responsible for holding and managing the UI state for the panels.
@@ -121,6 +131,11 @@ class MainActivity : ComponentActivity() {
                 val viewModel: PanelsViewModel = viewModel()
                 val panelsState by viewModel.panelsState.collectAsState()
 
+                val titles = listOf(
+                    "DISPLAY SETTINGS", "AUDIO & SOUND", "NETWORK", "STORAGE",
+                    "PERMISSIONS", "NOTIFICATIONS", "ADVANCED", "ABOUT", "HELP"
+                )
+
                 AdaptiveThreePanelScaffold(
                     widthSizeClass = windowSizeClass.widthSizeClass,
                     panelsState = panelsState,
@@ -128,18 +143,41 @@ class MainActivity : ComponentActivity() {
                     onRightPanelToggle = viewModel::toggleRightPanel,
                     onBottomPanelToggle = viewModel::toggleBottomPanel,
                     onPanelSelect = viewModel::selectCompactPanel,
-                    mainContent = { BasicText("Main Content", style = MaterialTheme.typography.bodyLarge) },
-                    leftPanelContent = { BasicText("Left Panel", style = MaterialTheme.typography.bodyLarge) },
-                    rightPanelContent = { BasicText("Right Panel", style = MaterialTheme.typography.bodyLarge) },
-                    bottomPanelContent = { BasicText("Bottom Panel", style = MaterialTheme.typography.bodyLarge) }
+                    mainContent = {
+                        BasicText(
+                            "Main Content",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    },
+                    leftPanelContent = {
+                        Box(
+                            contentAlignment = Alignment.Center, modifier = Modifier.padding(16.dp)
+                        ) {
+                            BasicText("Left Panel", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    },
+
+                    rightPanelContent = { PanelColumn(
+                        titles,
+                        headerBackgroundColor = Grey60,
+                        headerTitleColor = Color.White,
+                        contentAreaColor = Grey40,
+                        modifier = Modifier.width(300.dp).background(Grey60)
+                    ) },
+
+                    bottomPanelContent = {
+                        Box(
+                            contentAlignment = Alignment.Center, modifier = Modifier.padding(16.dp)
+                        ) {
+                            BasicText("Bottom Panel", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
                 )
             }
         }
     }
 }
-
 // endregion
-
 
 // region Previews
 /**

@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import com.example.adaptivethreepanels.model.ActivePanel
 import com.example.adaptivethreepanels.model.PanelsState
 import com.example.adaptivethreepanels.ui.theme.Grey20
-import com.example.adaptivethreepanels.ui.theme.Grey40
 import com.example.adaptivethreepanels.ui.theme.Grey60
 import com.example.adaptivethreepanels.ui.theme.HandleColor
 
@@ -81,8 +80,7 @@ fun AdaptiveThreePanelScaffold(
     rightPanelContent: @Composable () -> Unit,
     bottomPanelContent: @Composable () -> Unit
 ) {
-    val mainContentColor: Color = Grey20
-    val panelColor: Color = Grey40
+    val backgroundColor: Color = Grey20
     val dividerColor: Color = Grey60
     val handleColor: Color = HandleColor
 
@@ -90,8 +88,7 @@ fun AdaptiveThreePanelScaffold(
         WindowWidthSizeClass.Compact -> {
             CompactThreePanelScaffold(
                 modifier = modifier,
-                mainContentColor = mainContentColor,
-                panelColor = panelColor,
+                backgroundColor = backgroundColor,
                 panelsState = panelsState,
                 onPanelSelect = onPanelSelect,
                 mainContent = mainContent,
@@ -103,8 +100,7 @@ fun AdaptiveThreePanelScaffold(
         WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> {
             ThreePanelScaffold(
                 modifier = modifier,
-                mainContentColor = mainContentColor,
-                panelColor = panelColor,
+                backgroundColor = backgroundColor,
                 dividerColor = dividerColor,
                 handleColor = handleColor,
                 panelsState = panelsState,
@@ -128,8 +124,7 @@ fun AdaptiveThreePanelScaffold(
 @Composable
 fun ThreePanelScaffold(
     modifier: Modifier = Modifier,
-    mainContentColor: Color,
-    panelColor: Color,
+    backgroundColor: Color,
     dividerColor: Color,
     handleColor: Color,
     panelsState: PanelsState,
@@ -150,25 +145,29 @@ fun ThreePanelScaffold(
             .navigationBarsPadding()
     ) {
         Row(modifier = Modifier.weight(1f)) {
-            AnimatedVisibility(visible = panelsState.isLeftPanelOpen, modifier = Modifier.fillMaxHeight().background(panelColor), enter = fadeIn(animationSpec) + expandHorizontally(), exit = fadeOut(animationSpec) + shrinkHorizontally()) {
-                Box(Modifier.padding(16.dp).fillMaxHeight(), Alignment.Center) { leftPanelContent() }
+            // Left Panel
+            AnimatedVisibility(visible = panelsState.isLeftPanelOpen, modifier = Modifier.fillMaxHeight().background(backgroundColor), enter = fadeIn(animationSpec) + expandHorizontally(), exit = fadeOut(animationSpec) + shrinkHorizontally()) {
+                leftPanelContent()
             }
             Box(Modifier.fillMaxHeight().width(16.dp).background(dividerColor).clickable(onClick = onLeftPanelToggle), Alignment.Center) {
                 Box(Modifier.width(4.dp).height(40.dp).clip(RoundedCornerShape(2.dp)).background(handleColor))
             }
-            Box(Modifier.weight(1f).fillMaxHeight().background(mainContentColor), Alignment.Center) { mainContent() }
+            // Main Content
+            Box(Modifier.weight(1f).fillMaxHeight().background(backgroundColor), Alignment.Center) { mainContent() }
+            // Right Panel
             Box(Modifier.fillMaxHeight().width(16.dp).background(dividerColor).clickable(onClick = onRightPanelToggle), Alignment.Center) {
                 Box(Modifier.width(4.dp).height(40.dp).clip(RoundedCornerShape(2.dp)).background(handleColor))
             }
-            AnimatedVisibility(visible = panelsState.isRightPanelOpen, modifier = Modifier.fillMaxHeight().background(panelColor), enter = fadeIn(animationSpec) + expandHorizontally(), exit = fadeOut(animationSpec) + shrinkHorizontally()) {
-                Box(Modifier.padding(16.dp).fillMaxHeight(), Alignment.Center) { rightPanelContent() }
+            AnimatedVisibility(visible = panelsState.isRightPanelOpen, modifier = Modifier.fillMaxHeight().background(backgroundColor), enter = fadeIn(animationSpec) + expandHorizontally(), exit = fadeOut(animationSpec) + shrinkHorizontally()) {
+                rightPanelContent()
             }
         }
+        // Bottom Panel
         Box(Modifier.fillMaxWidth().height(16.dp).background(dividerColor).clickable(onClick = onBottomPanelToggle), Alignment.Center) {
             Box(Modifier.height(4.dp).width(40.dp).clip(RoundedCornerShape(2.dp)).background(handleColor))
         }
-        AnimatedVisibility(visible = panelsState.isBottomPanelOpen, modifier = Modifier.fillMaxWidth().background(panelColor), enter = fadeIn(animationSpec) + expandVertically(), exit = fadeOut(animationSpec) + shrinkVertically()) {
-            Box(Modifier.padding(16.dp).fillMaxWidth(), Alignment.Center) { bottomPanelContent() }
+        AnimatedVisibility(visible = panelsState.isBottomPanelOpen, modifier = Modifier.fillMaxWidth().background(backgroundColor), enter = fadeIn(animationSpec) + expandVertically(), exit = fadeOut(animationSpec) + shrinkVertically()) {
+            bottomPanelContent()
         }
     }
 }
@@ -180,8 +179,7 @@ fun ThreePanelScaffold(
 @Composable
 fun CompactThreePanelScaffold(
     modifier: Modifier = Modifier,
-    mainContentColor: Color,
-    panelColor: Color,
+    backgroundColor: Color,
     panelsState: PanelsState,
     onPanelSelect: (ActivePanel) -> Unit,
     mainContent: @Composable () -> Unit,
@@ -211,9 +209,9 @@ fun CompactThreePanelScaffold(
     ) { innerPadding ->
         // The innerPadding provided by Scaffold ensures our content is not obscured by the NavigationBar.
         Column(Modifier.fillMaxSize().padding(innerPadding)) {
-            Box(Modifier.weight(1f).fillMaxWidth().background(mainContentColor), Alignment.Center) { mainContent() }
+            Box(Modifier.weight(1f).fillMaxWidth().background(backgroundColor), Alignment.Center) { mainContent() }
             AnimatedVisibility(visible = activePanel != null, enter = fadeIn(animationSpec) + expandVertically(), exit = fadeOut(animationSpec) + shrinkVertically()) {
-                Box(Modifier.fillMaxWidth().background(panelColor).padding(16.dp), Alignment.Center) {
+                Box(Modifier.fillMaxWidth().background(backgroundColor).padding(16.dp), Alignment.Center) {
                     when (activePanel) {
                         ActivePanel.LEFT -> leftPanelContent()
                         ActivePanel.RIGHT -> rightPanelContent()
