@@ -23,6 +23,6 @@ androidx-compose-material3-windowSizeClass = { group = "androidx.compose.materia
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.10.1" }
+android-application = { id = "com.android.application", version = "8.13.1" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
